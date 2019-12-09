@@ -50,6 +50,29 @@ pca_scaled <- princomp(na.omit(dat_scaled[,2:ncol(dat)-1]))
 pca_scaled$loadings
 screeplot(pca_scaled)
 
+# ~~~~~~~~~~~~~~~~~~~ Logistic Regression / churn
+ind <- sample(1:nrow(dat), 0.8*nrow(dat))
+train <- dat[ind,]
+test <- dat[-ind,]
+
+
+logit <- glm(simple_churn ~ x1 + x2 + x3 +  x4 , 
+             data = train, family = "binomial", maxit = 100) 
+
+
+print(summary(logit))
+anova(logit, "Chisq")
+
+
+test_log <- predict(logit, newdata = test, type = "response")
+test_log <- ifelse(test_log>0.5,1,0)
+misClasificError <- mean(test_log != test$simple_churn)
+print(paste('Logistic Regression Accuracy',1-misClasificError))
+print("Confusion Matrix for Logistic Regression"); table(test$simple_churn, test_log > 0.5)
+# Odds Ratio --> Odds of an event happening
+exp(cbind(OR=coef(logit), confint(logit)))
+# Add back to df
+test$pred <- test_log
 
 
 # ~~~~~~~~~~~~~~~~~~~ Clustering
