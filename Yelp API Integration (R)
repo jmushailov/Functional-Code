@@ -3,7 +3,8 @@ rm(list=ls())
 require(tidyverse)
 require(httr)
 
-use_proxy(url = "http://pac.zscalertwo.net/benjaminmoore.com/proxy.pac", auth = "basic")
+# If necessary
+use_proxy(url = "", auth = "basic")
 
 client_id <- "xxxx"
 #client_secret deprecated as of April 2019
@@ -13,12 +14,6 @@ client_key <- "xxxxx"
 res <- POST("https://api.yelp.com/oauth2/token",
             body = list(grant_type = "client_credentials",
                         client_id = client_id))
-
-
-
-
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
-# NOTE THIS LOOP IS NOT INCREDIBLY ROBUST. It served my purposes for quick analysis but future alterations are needed
  
 
 # Before running this 
@@ -28,7 +23,7 @@ res <- POST("https://api.yelp.com/oauth2/token",
 # Radius is capped at 40000
 # OffsetP - leave as is for first iteration. If results don't come up as NaN comment out offsetP first vector and use second vector.
 # nameOfExport is what it will export as to desktop.
-# Change saveP <- "C:/Users/VMUSHAJ/Desktop/Yelp/" at the bottom to your desktop file path
+# Change saveP <- "C:/Users/Joe/Desktop/YelpData" at the bottom to your desktop file path
 
 
 token <- content(res)$access_token
